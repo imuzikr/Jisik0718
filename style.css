@@ -1,0 +1,324 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.screen {
+    display: none;
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    animation: fadeIn 0.5s ease-in;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 학생 선택 화면 */
+.student-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.student-btn {
+    padding: 15px 20px;
+    border: 2px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.student-btn:focus {
+    outline: 2px solid #764ba2;
+}
+
+.student-btn:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* 퀴즈 화면 */
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.student-info {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #667eea;
+}
+
+.progress {
+    background: #f8f9fa;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    color: #667eea;
+}
+
+.question-container {
+    margin-bottom: 30px;
+}
+
+#question-text {
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.options {
+    display: grid;
+    gap: 15px;
+}
+
+.option-btn {
+    padding: 15px 20px;
+    border: 2px solid #e9ecef;
+    background: white;
+    border-radius: 10px;
+    font-size: 1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option-btn:focus {
+    outline: 2px solid #764ba2;
+}
+
+.option-btn:hover {
+    border-color: #667eea;
+    background: #f8f9ff;
+}
+
+.option-btn.selected {
+    border-color: #667eea;
+    background: #667eea;
+    color: white;
+}
+
+.option-btn.correct {
+    border-color: #28a745;
+    background: #28a745;
+    color: white;
+}
+
+.option-btn.incorrect {
+    border-color: #dc3545;
+    background: #dc3545;
+    color: white;
+}
+
+.quiz-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* 버튼 스타일 */
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn.primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn.primary:hover:not(:disabled) {
+    background: #5a6fd8;
+    transform: translateY(-2px);
+}
+
+.btn.secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn.secondary:hover:not(:disabled) {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn.success {
+    background: #28a745;
+    color: white;
+}
+
+.btn.success:hover:not(:disabled) {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+/* 결과 화면 */
+.result-info {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.result-info p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.score {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.percentage {
+    font-size: 1.3rem;
+    color: #28a745;
+    font-weight: 600;
+}
+
+.result-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* 리더보드 화면 */
+.leaderboard-container {
+    margin-bottom: 30px;
+}
+
+#leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+#leaderboard-table th,
+#leaderboard-table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+}
+
+#leaderboard-table th {
+    background: #667eea;
+    color: white;
+    font-weight: 600;
+}
+
+#leaderboard-table tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+#leaderboard-table tr:hover {
+    background: #e9ecef;
+}
+
+.rank-1 {
+    background: linear-gradient(45deg, #ffd700, #ffed4e) !important;
+    font-weight: bold;
+}
+
+.rank-2 {
+    background: linear-gradient(45deg, #c0c0c0, #e8e8e8) !important;
+    font-weight: bold;
+}
+
+.rank-3 {
+    background: linear-gradient(45deg, #cd7f32, #daa520) !important;
+    font-weight: bold;
+}
+
+.leaderboard-controls {
+    display: flex;
+    justify-content: center;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    header h1 {
+        font-size: 2rem;
+    }
+    .student-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .quiz-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    .quiz-controls,
+    .result-controls {
+        flex-direction: column;
+    }
+    .btn {
+        width: 100%;
+    }
+}

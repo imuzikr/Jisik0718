@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>화학 원자 구조 퀴즈</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧪 화학 원자 구조 퀴즈</h1>
+            <p>고등학교 화학 시간에 배운 원자 구조에 대한 지식을 확인해보세요!</p>
+        </header>
+
+        <!-- 학생 선택 화면 -->
+        <div id="student-selection" class="screen active">
+            <h2>학생 선택</h2>
+            <div class="student-grid">
+                <button class="student-btn" data-student="김민수">김민수</button>
+                <button class="student-btn" data-student="이영희">이영희</button>
+                <button class="student-btn" data-student="박철수">박철수</button>
+                <button class="student-btn" data-student="정수진">정수진</button>
+                <button class="student-btn" data-student="최동현">최동현</button>
+                <button class="student-btn" data-student="한미영">한미영</button>
+                <button class="student-btn" data-student="윤태호">윤태호</button>
+                <button class="student-btn" data-student="송지은">송지은</button>
+                <button class="student-btn" data-student="강현우">강현우</button>
+                <button class="student-btn" data-student="임서연">임서연</button>
+            </div>
+        </div>
+
+        <!-- 퀴즈 화면 -->
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-header">
+                <h2>원자 구조 퀴즈</h2>
+                <div class="student-info">
+                    <span id="current-student"></span>
+                </div>
+                <div class="progress">
+                    <span id="question-number">1</span> / 5
+                </div>
+            </div>
+
+            <div class="question-container">
+                <h3 id="question-text"></h3>
+                <div class="options">
+                    <button class="option-btn" data-option="1"></button>
+                    <button class="option-btn" data-option="2"></button>
+                    <button class="option-btn" data-option="3"></button>
+                    <button class="option-btn" data-option="4"></button>
+                </div>
+            </div>
+
+            <div class="quiz-controls">
+                <button id="next-btn" class="btn primary" disabled>다음 문제</button>
+                <button id="finish-btn" class="btn success" style="display: none;">퀴즈 완료</button>
+            </div>
+        </div>
+
+        <!-- 결과 화면 -->
+        <div id="result-screen" class="screen">
+            <h2>퀴즈 결과</h2>
+            <div class="result-info">
+                <p><strong id="result-student"></strong>님의 결과</p>
+                <div class="score">
+                    <span id="correct-answers">0</span> / 5 정답
+                </div>
+                <div class="percentage">
+                    정답률: <span id="percentage">0</span>%
+                </div>
+            </div>
+            <div class="result-controls">
+                <button id="view-leaderboard-btn" class="btn primary">리더보드 보기</button>
+                <button id="restart-btn" class="btn secondary">다시 시작</button>
+            </div>
+        </div>
+
+        <!-- 리더보드 화면 -->
+        <div id="leaderboard-screen" class="screen">
+            <h2>🏆 리더보드</h2>
+            <div class="leaderboard-container">
+                <table id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>순위</th>
+                            <th>학생명</th>
+                            <th>정답 수</th>
+                            <th>정답률</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                    </tbody>
+                </table>
+            </div>
+            <div class="leaderboard-controls">
+                <button id="back-to-start-btn" class="btn primary">처음으로</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
