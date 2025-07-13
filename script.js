@@ -59,13 +59,14 @@ let selectedAnswer = null;
 let studentAnswers = [];
 let leaderboard = []; // {student, correctCount, percentage, timestamp}
 
-// DOM 캐싱
+// DOM 캐싱 - 실제 HTML id와 일치하도록 수정
 const screens = {
-    studentSelection: document.getElementById('student-selection'),
-    quiz: document.getElementById('quiz-screen'),
-    result: document.getElementById('result-screen'),
-    leaderboard: document.getElementById('leaderboard-screen')
+    'student-selection': document.getElementById('student-selection'),
+    'quiz': document.getElementById('quiz-screen'),
+    'result': document.getElementById('result-screen'),
+    'leaderboard': document.getElementById('leaderboard-screen')
 };
+
 const optionBtns = Array.from(document.querySelectorAll('.option-btn'));
 const nextBtn = document.getElementById('next-btn');
 const finishBtn = document.getElementById('finish-btn');
@@ -77,8 +78,8 @@ const backToStartBtn = document.getElementById('back-to-start-btn');
 document.querySelectorAll('.student-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         currentStudent = btn.dataset.student;
-        showScreen('quiz');
         startQuiz();
+        showScreen('quiz');
     });
 });
 
@@ -86,16 +87,7 @@ function startQuiz() {
     currentQuestionIndex = 0;
     studentAnswers = [];
     selectedAnswer = null;
-    // 학생 이름 표시
     document.getElementById('current-student').textContent = currentStudent;
-    // 퀴즈 화면의 문제, 선택지 등도 초기화
-    document.getElementById('question-text').textContent = '';
-    document.getElementById('question-number').textContent = '';
-    optionBtns.forEach(btn => {
-        btn.classList.remove('selected');
-        btn.disabled = false;
-        btn.textContent = '';
-    });
     showQuestion();
 }
 
@@ -157,7 +149,7 @@ finishBtn.addEventListener('click', () => {
 function showResult() {
     if (studentAnswers.length !== quizData.length) {
         alert('답변 수가 맞지 않습니다. 다시 시도해 주세요.');
-        showScreen('student-selection');
+        goToStart();
         return;
     }
     let correctAnswers = 0;
@@ -189,7 +181,6 @@ function saveResult(student, correctCount, percentage) {
 viewLeaderboardBtn.addEventListener('click', showLeaderboard);
 
 function showLeaderboard() {
-    // 정답 수 기준 내림차순, 동점자는 최근 도전이 위로
     leaderboard.sort((a, b) => {
         if (b.correctCount !== a.correctCount) {
             return b.correctCount - a.correctCount;
@@ -213,45 +204,98 @@ function showLeaderboard() {
     showScreen('leaderboard');
 }
 
-// 다시 시작(결과 화면)
-restartBtn.addEventListener('click', goToStart);
-// 처음으로(리더보드 화면)
-backToStartBtn.addEventListener('click', goToStart);
-
+// 완전 초기화 및 학생 선택 화면으로 이동 - 수정된 부분
 function goToStart() {
     // 상태 완전 초기화
     currentStudent = '';
     currentQuestionIndex = 0;
     selectedAnswer = null;
     studentAnswers = [];
-    // 학생 이름 표시 영역도 초기화
+    
+    // DOM 요소들 초기화 (안전한 방식으로)
     const studentElem = document.getElementById('current-student');
     if (studentElem) studentElem.textContent = '';
-    // 퀴즈 화면의 문제, 선택지 등도 초기화
-    document.getElementById('question-text').textContent = '';
-    document.getElementById('question-number').textContent = '';
+    
+    const qText = document.getElementById('question-text');
+    if (qText) qText.textContent = '';
+    
+    const qNum = document.getElementById('question-number');
+    if (qNum) qNum.textContent = '1';
+    
+    // 옵션 버튼들 초기화
     optionBtns.forEach(btn => {
         btn.classList.remove('selected');
         btn.disabled = false;
         btn.textContent = '';
     });
-    // 화면 전환
+    
+    // 다음 버튼 상태 초기화
+    if (nextBtn) {
+        nextBtn.disabled = true;
+        nextBtn.style.display = 'inline-block';
+    }
+    
+    // 완료 버튼 숨기기
+    if (finishBtn) {
+        finishBtn.style.display = 'none';
+    }
+    
+    // 학생 선택 화면으로 이동 - 올바른 키 사용
     showScreen('student-selection');
 }
 
-// 화면 전환
+// 결과 화면, 리더보드 화면에서 모두 정상 동작
+restartBtn.addEventListener('click', goToStart);
+backToStartBtn.addEventListener('click', goToStart);
+
+// 화면 전환 함수 - 더 안전하게 수정
 function showScreen(screenName) {
-    Object.values(screens).forEach(screen => screen.classList.remove('active'));
-    screens[screenName].classList.add('active');
+    // 모든 화면 숨기기
+    Object.values(screens).forEach(screen => {
+        if (screen) {
+            screen.classList.remove('active');
+        }
+    });
+    
+    // 선택된 화면 보이기
+    if (screens[screenName]) {
+        screens[screenName].classList.add('active');
+    } else {
+        // 오류 발생 시 디버깅 정보 출력 및 기본 화면으로 이동
+        console.error('화면 전환 실패:', screenName);
+        console.log('사용 가능한 화면들:', Object.keys(screens));
+        
+        // 기본적으로 학생 선택 화면으로 이동
+        if (screens['student-selection']) {
+            screens['student-selection'].classList.add('active');
+        }
+    }
 }
 
-// 로컬 스토리지
+// 로컬 스토리지 함수들
 function loadLeaderboard() {
-    const saved = localStorage.getItem('chemistryQuizLeaderboard');
-    if (saved) leaderboard = JSON.parse(saved);
+    try {
+        const saved = localStorage.getItem('chemistryQuizLeaderboard');
+        if (saved) {
+            leaderboard = JSON.parse(saved);
+        }
+    } catch (error) {
+        console.error('리더보드 로드 실패:', error);
+        leaderboard = [];
+    }
 }
-function saveLeaderboard() {
-    localStorage.setItem('chemistryQuizLeaderboard', JSON.stringify(leaderboard));
-}
-document.addEventListener('DOMContentLoaded', loadLeaderboard);
 
+function saveLeaderboard() {
+    try {
+        localStorage.setItem('chemistryQuizLeaderboard', JSON.stringify(leaderboard));
+    } catch (error) {
+        console.error('리더보드 저장 실패:', error);
+    }
+}
+
+// 페이지 로드 시 리더보드 로드
+document.addEventListener('DOMContentLoaded', () => {
+    loadLeaderboard();
+    // 페이지 로드 시 확실히 학생 선택 화면이 보이도록
+    showScreen('student-selection');
+});
